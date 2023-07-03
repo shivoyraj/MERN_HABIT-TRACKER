@@ -1,25 +1,67 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import HomePage from './components/homepage/HomePage';
 import WeekPage from './components/statuspage/WeekPage';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import StatusPage from './components/statuspage/StatusPage';
-
-import { Provider } from 'react-redux'; 
-import store from './store'; 
+import axios from 'axios';
+import constants from './utils/constants';
 
 function App() {
+
+  const habitNameRef = useRef(""); // Move the definition of habitNameRef here
+  const [allHabitsObj, setAllHabitsObj] = useState([]);
+
+  useEffect(() => {
+    axios.get(constants.GET_ALL_HABITS_URL)
+      .then(response => {
+        console.log(response.data.allHabitsObj);
+        onSetHabits(response.data.allHabitsObj);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
+
+  const onSetHabits = (habitOjb) => {
+    setAllHabitsObj(habitOjb);
+  }
+
+  useEffect(() => {
+  }, [allHabitsObj]);
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const habitName = habitNameRef.current.value.trim();
+    axios.post(constants.CREATE_NEW_HABIT_URL, { "title": habitName })
+      .then(response => {
+        console.log(response.data.habit);
+        setAllHabitsObj([...allHabitsObj, response.data.habit])
+      })
+      .catch(error => {
+        console.error(error.response.data.errorMessage);
+      });
+  }
+
+  const onDelete = (habitId) => {
+    axios.delete(constants.DELETE_HABIT_URL + "/" + habitId)
+      .then(habit => {
+        setAllHabitsObj(allHabitsObj.filter(habit => habit._id !== habitId))
+      })
+      .catch(error => {
+        console.error(error.response.data.errorMessage);
+      });
+  }
+
   return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/status" element={<WeekPage />} />
-          <Route path="/status/nextWeekRecords" element={<StatusPage />} />
-          <Route path="/status/currentWeekRecords" element={<StatusPage />} />
-          <Route path="/status/previousWeekRecords" element={<StatusPage />} />
-        </Routes>
-      </BrowserRouter>
-    </Provider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage allHabitsObj={allHabitsObj} handleDelete={onDelete} handleSubmit={onSubmit} habitNameRef={habitNameRef} />} />
+        <Route path="/status" element={<WeekPage allHabitsObj={allHabitsObj} setHabits={onSetHabits} />} />
+        <Route path="/status/nextWeekRecords" element={<StatusPage allHabitsObj={allHabitsObj}  />} />
+        <Route path="/status/currentWeekRecords" element={<StatusPage allHabitsObj={allHabitsObj} setHabits={onSetHabits} />} />
+        <Route path="/status/previousWeekRecords" element={<StatusPage allHabitsObj={allHabitsObj} />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

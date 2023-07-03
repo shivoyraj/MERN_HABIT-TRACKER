@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setHabits } from '../../actions/habit_action';
 import axios from 'axios';
 import constants from '../../utils/constants';
+import TableCell from './TableCell';
 
 const WeekPage = (props) => {
 
   const [currentMonth, setCurrentMonth] = useState(''); // Set initial month value
   const [currentYear, setCurrentYear] = useState(''); // Set initial year value
   const [currentWeekDates, setCurrentWeekDates] = useState([]); // Set initial week dates value
-  const allHabitsObj = useSelector(state => state.habits);
-  const dispatch = useDispatch();
+  const allHabitsObj = props.allHabitsObj;
 
   const localDate = (() => {
     const now = new Date();
@@ -21,7 +19,7 @@ const WeekPage = (props) => {
   useEffect(() => {
     axios.get(constants.GET_CURRENT_WEEK_URL + "?today=" + localDate)
       .then(response => {
-        dispatch(setHabits(response.data.allHabitsObj));
+        props.setHabits(response.data.allHabitsObj);
         setCurrentMonth(response.data.currentMonth);
         setCurrentYear(response.data.currentYear);
         setCurrentWeekDates(response.data.currentWeekDates);
@@ -34,23 +32,9 @@ const WeekPage = (props) => {
   const emptyDateCount = currentWeekDates.filter(date => date === '_').length;
   const isSkipsInFirstWeek = currentWeekDates[0] === '_';
 
-  // Helper function to get the entry for a habit on a specific date
-  const getEntryForDate = (habit, date) => {
-    const entry = habit.record.find(record => new Date(record.date).toDateString() === date.toDateString());
-    return entry || null;
-  }
-
-  // Helper function to render a table cell for a habit on a specific date
-  const renderTableCell = (habit, date) => {
-    const entry = getEntryForDate(habit, date);
-    return (
-      <td key={`${habit._id}-${date}`}>
-        <span id={`${habit._id},${entry?._id}`} onClick={() => props.changeStatus(habit._id,entry?._id)}>
-          {entry?.status === 'Done' ? '✅' : entry?.status === 'Not done' ? '❌' : '⬜'}
-        </span>
-      </td>
-    )
-  }
+  const renderTableCell = (habit, date) => (
+    <TableCell habit={habit} date={date} changeStatus={props.changeStatus} />
+  );
 
   return (
     <div className="calendar">

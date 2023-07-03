@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import TableCell from './TableCell';
 
+function DayPage(props) {
 
-function DayPage() {
-
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [allHabitsObj, setAllHabitsObj] = useState([
-        { title: 'gym', record: [] },
-        // Add other initial habit objects here
-    ]);
-  
+  const [currentDate, setCurrentDate] = useState(props.data);
+  const allHabitsObj = props.allHabitsObj;
   const today = new Date(currentDate);
+
+  useState(() => {
+    console.log(allHabitsObj);
+  })
 
   return (
     <div className="card">
@@ -24,18 +25,16 @@ function DayPage() {
         </h5>
       </div>
       {allHabitsObj.map(habit => {
-        const entry = habit.record.find(record => record.date.toLocaleDateString() === today.toLocaleDateString());
+        const entry = habit.record.find(record => {
+          const recordDate = new Date(record.date);
+          return recordDate.toLocaleDateString() === today.toLocaleDateString();
+        });
         return (
           <div className="card-body" key={habit._id}>
             <h3 className="card-subtitle mb-2">{habit.title}</h3>
             <p className="card-text">
               <strong>Today's Record Status:</strong>
-              <span
-                id={`today:${habit._id},${entry?._id}`}
-                // onClick={() => changeStatus(habit._id, entry?._id)}
-              >
-                {entry?.status === 'Done' ? '✅' : entry?.status === 'Not done' ? '❌' : '⬜'}
-              </span>
+              <TableCell habit={habit} date={today} changeStatus={props.changeStatus} />
             </p>
           </div>
         );

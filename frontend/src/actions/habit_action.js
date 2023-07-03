@@ -18,3 +18,10 @@ export const deleteHabit = (habitId) => {
     payload: habitId
   };
 };
+
+export const updateHabit = (habitId,statusId,updatedStatus) => {
+  return {
+    type: 'UPDATE_HABIT',
+    payload: [habitId,statusId,updatedStatus]
+  };
+};
