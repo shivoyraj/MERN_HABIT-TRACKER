@@ -17,25 +17,8 @@ function StatusPage(props) {
 
     var changeStatus = async (habitId, statusId) => {
         try {
-            console.log(constants.UPDATE_STATUS_URL + "/" + habitId + "/" + statusId);
             const response = await axios.get(constants.UPDATE_STATUS_URL + "/" + habitId + "/" + statusId);
-            console.log(response);
             return response.data.status;
-
-            // const updatedHabit = response.data;
-            // let updateStatusIcon;
-            // if (updatedHabit.status === 'Done')
-            //     updateStatusIcon = '✅';
-            // else if (updatedHabit.status === 'Not done')
-            //     updateStatusIcon = '❌';
-            // else
-            //     updateStatusIcon = '⬜';
-            // return updateStatusIcon;
-            // document.getElementById(`${habitId},${statusId}`).innerHTML = updateStatusIcon;
-            // const element = document.getElementById(`today:${habitId},${statusId}`);
-            // if (element) {
-            //     element.innerHTML = updateStatusIcon;
-            // }
         } catch (error) {
             console.error("An error occurred while updating the status." + error);
         }

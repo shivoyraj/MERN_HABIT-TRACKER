@@ -14,6 +14,10 @@ const TableCell = ({ habit, date, changeStatus }) => {
     useEffect(() => {
     }, [status]);
 
+    useEffect(() => {
+        console.log("table cell -------------------",date);
+    });
+
     const handleClick = async () => {
         try {
             const updatedStatus = await changeStatus(habit._id, entry?._id);

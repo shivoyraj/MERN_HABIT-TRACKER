@@ -56,10 +56,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage allHabitsObj={allHabitsObj} handleDelete={onDelete} handleSubmit={onSubmit} habitNameRef={habitNameRef} />} />
-        <Route path="/status" element={<WeekPage allHabitsObj={allHabitsObj} setHabits={onSetHabits} />} />
-        <Route path="/status/nextWeekRecords" element={<StatusPage allHabitsObj={allHabitsObj}  />} />
-        <Route path="/status/currentWeekRecords" element={<StatusPage allHabitsObj={allHabitsObj} setHabits={onSetHabits} />} />
-        <Route path="/status/previousWeekRecords" element={<StatusPage allHabitsObj={allHabitsObj} />} />
+        <Route path="/status" element={<StatusPage allHabitsObj={allHabitsObj} setHabits={onSetHabits} />} />
       </Routes>
     </BrowserRouter>
   );

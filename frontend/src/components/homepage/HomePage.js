@@ -12,7 +12,7 @@ function HomePage(props) {
         <div>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
                 <a className="navbar-brand" href="#">Habit Tracker</a>
-                <a className="nav-link text-dark" onClick={() => navigate(`/status/currentWeekRecords/`)}>Track Habits</a>
+                <a className="nav-link text-dark" onClick={() => navigate(`/status`)}>Track Habits</a>
             </nav>
             <div className="container mt-5">
                 <h3>Add a Habit</h3>

@@ -29,6 +29,7 @@ async function renderCalender(req, res, currentWeekDates, currentMonth, currentY
         }
         await habitObj.save();
     }
+    console.log(currentWeekDates);
     return res.status(200).send({
         "allHabitsObj" : allHabitsObj,
         "currentWeekDates" : currentWeekDates,

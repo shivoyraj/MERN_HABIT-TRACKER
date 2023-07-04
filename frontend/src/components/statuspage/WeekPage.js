@@ -16,21 +16,36 @@ const WeekPage = (props) => {
     return now.toLocaleString('en-US', { timeZone: userTimeZone });
   })();
 
-  useEffect(() => {
-    axios.get(constants.GET_CURRENT_WEEK_URL + "?today=" + localDate)
+  const initializeData = (response) => {
+    props.setHabits(response.data.allHabitsObj);
+    setCurrentMonth(response.data.currentMonth);
+    setCurrentYear(response.data.currentYear);
+    setCurrentWeekDates(response.data.currentWeekDates);
+  }
+
+  const loadRequestedWeekData = (url) => {
+    axios.get(url)
       .then(response => {
-        props.setHabits(response.data.allHabitsObj);
-        setCurrentMonth(response.data.currentMonth);
-        setCurrentYear(response.data.currentYear);
-        setCurrentWeekDates(response.data.currentWeekDates);
+        initializeData(response);
       })
       .catch(error => {
         console.error(error);
       });
-  }, []);
+  }
 
-  const emptyDateCount = currentWeekDates.filter(date => date === '_').length;
-  const isSkipsInFirstWeek = currentWeekDates[0] === '_';
+  const [emptyDateCount, setEmptyDateCount] = useState(0);
+  const [isSkipsInFirstWeek, setIsSkipInFirstWeek] = useState(false);
+
+  useEffect(() => {
+    setEmptyDateCount(currentWeekDates.filter(date => date === '_').length);
+    setIsSkipInFirstWeek(currentWeekDates[0] === '_');
+    console.log(currentWeekDates);
+  }, [currentWeekDates]);
+
+  useEffect(() => {
+    loadRequestedWeekData(constants.GET_CURRENT_WEEK_URL + "?today=" + localDate)
+    console.log();
+  }, [])
 
   const renderTableCell = (habit, date) => (
     <TableCell habit={habit} date={date} changeStatus={props.changeStatus} />
@@ -39,9 +54,9 @@ const WeekPage = (props) => {
   return (
     <div className="calendar">
       <div className="header">
-        <button id="prev" onClick={() => window.location.href = '/status/previousWeekRecords'}>&lt;</button>
+        <button id="prev" onClick={() => loadRequestedWeekData(constants.GET_PREV_WEEK_URL)}>&lt;</button>
         <span id="month">{currentMonth} : {currentYear}</span>
-        <button id="next" onClick={() => window.location.href = '/status/nextWeekRecords'}>&gt;</button>
+        <button id="next" onClick={() => loadRequestedWeekData(constants.GET_NEXT_WEEK_URL)}>&gt;</button>
         <br /><br />
         <table className="table">
           <thead>
@@ -57,22 +72,14 @@ const WeekPage = (props) => {
             </tr>
             <tr>
               <th></th>
-              {currentWeekDates.map(date => {
-                if (date === '_') {
-                  return <th key={date}>{date}</th>
-                } else {
-                  return <th key={date}>{new Date(date).getDate()}</th>
-                }
-              })}
+              {currentWeekDates.map(date => date === '_' ?  <td>_</td> : <th>{new Date(date).getDate()}</th>)}
             </tr>
           </thead>
           <tbody id="dates">
             {allHabitsObj.map(habit => (
               <tr key={habit._id}>
                 <td>{habit.title}</td>
-                {isSkipsInFirstWeek && Array(emptyDateCount).fill(null).map((_, index) => <td key={`empty-${index}`}></td>)}
-                {currentWeekDates.map(date => renderTableCell(habit, new Date(date)))}
-                {!isSkipsInFirstWeek && Array(emptyDateCount).fill(null).map((_, index) => <td key={`empty-${index}`}></td>)}
+                {currentWeekDates.map(date => date === '_' ?  <td></td> : renderTableCell(habit, new Date(date)))}
               </tr>
             ))}
           </tbody>
