@@ -1,4 +1,4 @@
-const BACKEND_HOSTNAME = "http://localhost:8001";
+const BACKEND_HOSTNAME = "http://habittracker-backend.onrender.com/";
 
 const constants = {
     GET_ALL_HABITS_URL: BACKEND_HOSTNAME + "/habits/loadhabits",
