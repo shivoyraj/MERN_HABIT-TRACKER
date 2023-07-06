@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import HomePage from './components/homepage/HomePage';
-import WeekPage from './components/statuspage/WeekPage';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import StatusPage from './components/statuspage/StatusPage';
 import axios from 'axios';

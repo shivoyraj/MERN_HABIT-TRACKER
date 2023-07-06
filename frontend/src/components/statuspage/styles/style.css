@@ -1,24 +1,17 @@
-/* Styling for habit.ejs */
-
-td {
-    height: 100px;
-    width: 100px;
-  }
-  
   .custom-switch-label::before {
     background-color: #007bff;
   }
-  
+
   .custom-switch-input:checked+.custom-switch-label::before {
     background-color: #28a745;
   }
-  
-  #currentView{
+
+  #currentView {
     position: absolute;
     top: 25%;
     left: 70%;
   }
-  
+
   .toggle {
     display: inline-block;
     width: 60px;
@@ -26,11 +19,11 @@ td {
     position: absolute;
     left: 80%;
   }
-  
+
   .toggle input {
     display: none;
   }
-  
+
   .toggle-label {
     position: absolute;
     top: 0;
@@ -42,7 +35,7 @@ td {
     cursor: pointer;
     transition: background-color 0.2s;
   }
-  
+
   .toggle-label:after {
     content: "";
     display: block;
@@ -55,19 +48,19 @@ td {
     border-radius: 50%;
     transition: transform 0.2s;
   }
-  
+
   .toggle input:checked+.toggle-label {
     background-color: #66bb6a;
   }
-  
+
   .toggle input:checked+.toggle-label:after {
     transform: translateX(26px);
   }
-  
+
   #dayView {
     display: none;
   }
-  
+
   button {
     background-color: #008CBA;
     color: white;
@@ -80,25 +73,25 @@ td {
     margin: 4px 2px;
     cursor: pointer;
   }
-  
+
   @media (width<=1200px) {
-    #currentView{
+    #currentView {
       position: absolute;
       top: 25%;
       left: 65%;
     }
   }
-  
+
   @media (width<=770px) {
-    #currentView{
+    #currentView {
       position: absolute;
       top: 25%;
       left: 60%;
     }
   }
-  
+
   @media (width<=530px) {
-    #currentView{
+    #currentView {
       position: absolute;
       top: 25%;
       left: 50%;
