@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 const TableCell = ({ habit, date, changeStatus }) => {
-
     // Helper function to get the entry for a habit on a specific date
     const getEntryForDate = (habit, date) => {
         const entry = habit.record.find(record => new Date(record.date).toDateString() === date.toDateString());
@@ -12,10 +11,12 @@ const TableCell = ({ habit, date, changeStatus }) => {
     const [status, setStatus] = useState(entry?.status);
 
     useEffect(() => {
+        // Empty useEffect hook to trigger side effects when status changes
     }, [status]);
 
     useEffect(() => {
-        console.log("table cell -------------------",date);
+        // Log the date when TableCell component mounts or updates
+        console.log("table cell -------------------", date);
     });
 
     const handleClick = async () => {
@@ -29,6 +30,7 @@ const TableCell = ({ habit, date, changeStatus }) => {
 
     return (
         <td key={`${habit._id}-${date}`}>
+            {/* Render the status icon and handle click event */}
             <span id={`${habit._id},${entry?._id}`} onClick={handleClick}>
                 {status === 'Done' ? '✅' : status === 'Not done' ? '❌' : '⬜'}
             </span>
