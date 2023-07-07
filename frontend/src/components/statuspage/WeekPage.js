@@ -36,25 +36,17 @@ const WeekPage = (props) => {
       });
   }
 
-  const [emptyDateCount, setEmptyDateCount] = useState(0);
-  const [isSkipsInFirstWeek, setIsSkipInFirstWeek] = useState(false);
-
   useEffect(() => {
-    // Update empty date count and check if there are skips in the first week
-    setEmptyDateCount(currentWeekDates.filter(date => date === '_').length);
-    setIsSkipInFirstWeek(currentWeekDates[0] === '_');
-    console.log(currentWeekDates);
-  }, [currentWeekDates]);
+  }, [currentWeekDates, currentMonth, currentYear, allHabitsObj]);
 
   useEffect(() => {
     // Load data for the current week on component mount
     loadRequestedWeekData(constants.GET_CURRENT_WEEK_URL + "?today=" + localDate);
-    console.log();
   }, []);
 
   const renderTableCell = (habit, date) => (
     // Render a table cell component for each habit and date
-    <TableCell habit={habit} date={date} changeStatus={props.changeStatus} />
+    <TableCell key={`${habit._id}-${date}`} habit={habit} date={date} changeStatus={props.changeStatus} />
   );
 
   return (
@@ -80,7 +72,7 @@ const WeekPage = (props) => {
             {/* Render the week dates */}
             <tr>
               <th></th>
-              {currentWeekDates.map(date => date === '_' ? <td>_</td> : <th>{new Date(date).getDate()}</th>)}
+              {currentWeekDates.map(date => date === '_' ? <td>_</td> : <th key={`${date}`}>{new Date(date).getDate()}</th>)}
             </tr>
           </thead>
           <tbody id="dates">

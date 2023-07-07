@@ -13,7 +13,6 @@ function App() {
   useEffect(() => {
     axios.get(constants.GET_ALL_HABITS_URL)
       .then(response => {
-        console.log(response.data.allHabitsObj);
         onSetHabits(response.data.allHabitsObj);
       })
       .catch(error => {
@@ -33,7 +32,6 @@ function App() {
     const habitName = habitNameRef.current.value.trim();
     axios.post(constants.CREATE_NEW_HABIT_URL, { "title": habitName })
       .then(response => {
-        console.log(response.data.habit);
         setAllHabitsObj([...allHabitsObj, response.data.habit])
       })
       .catch(error => {

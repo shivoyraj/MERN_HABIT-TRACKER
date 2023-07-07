@@ -14,11 +14,6 @@ const TableCell = ({ habit, date, changeStatus }) => {
         // Empty useEffect hook to trigger side effects when status changes
     }, [status]);
 
-    useEffect(() => {
-        // Log the date when TableCell component mounts or updates
-        console.log("table cell -------------------", date);
-    });
-
     const handleClick = async () => {
         try {
             const updatedStatus = await changeStatus(habit._id, entry?._id);
