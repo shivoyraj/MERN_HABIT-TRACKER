@@ -1,6 +1,7 @@
-import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 function HomePage(props) {
     const navigate = useNavigate();
@@ -36,15 +37,23 @@ function HomePage(props) {
                     </thead>
                     <tbody>
                         {/* Loop over habits and display them */}
-                        {allHabitsObj.map((habit) => (
-                            <tr key={habit._id}>
-                                <td>{habit.title}</td>
-                                <td>
-                                    {/* Delete button */}
-                                    <a onClick={() => props.handleDelete(habit._id)} className="btn btn-danger">Delete</a>
+                        {props.isLoading ? (
+                            <tr>
+                                <td colSpan="2" className="text-center">
+                                    <FontAwesomeIcon icon={faSpinner} spin /> Loading...
                                 </td>
                             </tr>
-                        ))}
+                        ) : (
+                            allHabitsObj.map((habit) => (
+                                <tr key={habit._id}>
+                                    <td>{habit.title}</td>
+                                    <td>
+                                        {/* Delete button */}
+                                        <a onClick={() => props.handleDelete(habit._id)} className="btn btn-danger">Delete</a>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>
