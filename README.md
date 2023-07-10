@@ -23,6 +23,7 @@ This NodeJS-HabitTracker application allows you to track your daily habits. You 
 - Node.js
 - Express.js
 - MongoDB
+- ReactJS
 
 ## Contributors
 This application was developed by [SHIVAM TRIPATHI].
