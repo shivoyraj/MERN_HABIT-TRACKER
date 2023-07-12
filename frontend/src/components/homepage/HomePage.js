@@ -1,7 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import Loading from '../../utils/Loading';
 
 function HomePage(props) {
     const navigate = useNavigate();
@@ -21,9 +20,9 @@ function HomePage(props) {
                 <form onSubmit={props.handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="habitName">Habit Name</label>
-                        <input type="text" className="form-control" ref={props.habitNameRef} required />
+                        <input type="text" className="form-control" ref={props.habitNameRef} disabled={props.isLoading} required />
                     </div>
-                    <button type="submit" className="btn btn-success">Add Habit</button>
+                    <button type="submit" className="btn btn-success" disabled={props.isLoading}>Add Habit</button>
                 </form>
                 <hr />
                 <h3>Current Habits</h3>
@@ -39,9 +38,7 @@ function HomePage(props) {
                         {/* Loop over habits and display them */}
                         {props.isLoading ? (
                             <tr>
-                                <td colSpan="2" className="text-center">
-                                    <FontAwesomeIcon icon={faSpinner} spin /> Loading...
-                                </td>
+                                <Loading />
                             </tr>
                         ) : (
                             allHabitsObj.map((habit) => (
