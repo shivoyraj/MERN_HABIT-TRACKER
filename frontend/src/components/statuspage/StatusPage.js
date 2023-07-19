@@ -65,9 +65,9 @@ function StatusPage(props) {
                 <br />
                 {/* Render WeekPage or DayPage based on the view mode */}
                 {isWeekView ? (
-                    <WeekPage data={localDate} changeStatus={changeStatus} setHabits={props.setHabits} allHabitsObj={props.allHabitsObj} />
+                    <WeekPage data={localDate} changeStatus={changeStatus} />
                 ) : (
-                    <DayPage data={localDate} changeStatus={changeStatus} setHabits={props.setHabits} allHabitsObj={props.allHabitsObj} />
+                    <DayPage date={localDate} changeStatus={changeStatus} />
                 )}
             </div>
         </div>

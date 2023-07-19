@@ -1,10 +1,55 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { addHabit, deleteHabit } from '../../actions/action';
+
+import axios from 'axios';
+import constants from '../../utils/constants';
 import Loading from '../../utils/Loading';
 
-function HomePage(props) {
+function HomePage() {
+
     const navigate = useNavigate();
-    const allHabitsObj = props.allHabitsObj;
+    const [isLoading, setIsLoading] = useState(true); // Add loading state
+    const habitNameRef = useRef("");
+    const dispatch = useDispatch();
+    const allHabitsObj = useSelector(state => state.habits);
+
+    useEffect(() => {
+        if (allHabitsObj) {
+            setIsLoading(false);
+        }
+    }, [allHabitsObj]);
+
+    const onDelete = (habitId) => {
+        setIsLoading(true); // Set loading state to true before making the request
+        axios.delete(constants.DELETE_HABIT_URL + "/" + habitId)
+            .then(response => {
+                dispatch(deleteHabit(habitId))
+                setIsLoading(false); // Set loading state to false when request is completed
+            })
+            .catch(error => {
+                console.error(error.response.data.errorMessage);
+                setIsLoading(false); // Set loading state to false on error
+            });
+    }
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const habitName = habitNameRef.current.value.trim();
+        setIsLoading(true); // Set loading state to true before making the request
+        axios.post(constants.CREATE_NEW_HABIT_URL, { "title": habitName })
+            .then(response => {
+                dispatch(addHabit(response.data.habit))
+                setIsLoading(false); // Set loading state to false when request is completed
+                habitNameRef.current.value = ""; // Clear the input text
+            })
+            .catch(error => {
+                console.error(error);
+                setIsLoading(false); // Set loading state to false on error
+            });
+    }
 
     return (
         <div>
@@ -17,12 +62,12 @@ function HomePage(props) {
             <div className="container mt-5">
                 <h3>Add a Habit</h3>
                 {/* Habit form */}
-                <form onSubmit={props.handleSubmit}>
+                <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="habitName">Habit Name</label>
-                        <input type="text" className="form-control" ref={props.habitNameRef} disabled={props.isLoading} required />
+                        <input type="text" className="form-control" ref={habitNameRef} disabled={isLoading} required />
                     </div>
-                    <button type="submit" className="btn btn-success" disabled={props.isLoading}>Add Habit</button>
+                    <button type="submit" className="btn btn-success" disabled={isLoading}>Add Habit</button>
                 </form>
                 <hr />
                 <h3>Current Habits</h3>
@@ -36,9 +81,11 @@ function HomePage(props) {
                     </thead>
                     <tbody>
                         {/* Loop over habits and display them */}
-                        {props.isLoading ? (
+                        {isLoading ? (
                             <tr>
-                                <Loading />
+                                <td>
+                                    <Loading />
+                                </td>
                             </tr>
                         ) : (
                             allHabitsObj.map((habit) => (
@@ -46,7 +93,7 @@ function HomePage(props) {
                                     <td>{habit.title}</td>
                                     <td>
                                         {/* Delete button */}
-                                        <a onClick={() => props.handleDelete(habit._id)} className="btn btn-danger">Delete</a>
+                                        <a onClick={() => onDelete(habit._id)} className="btn btn-danger">Delete</a>
                                     </td>
                                 </tr>
                             ))
