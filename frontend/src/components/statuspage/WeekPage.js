@@ -3,14 +3,18 @@ import axios from 'axios';
 import constants from '../../utils/constants';
 import TableCell from './TableCell';
 import Loading from '../../utils/Loading';
+import { useSelector, useDispatch } from 'react-redux';
+import { setHabits } from '../../actions/action';
+
 
 const WeekPage = (props) => {
 
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
   const [currentMonth, setCurrentMonth] = useState('');
   const [currentYear, setCurrentYear] = useState('');
   const [currentWeekDates, setCurrentWeekDates] = useState([]);
-  const allHabitsObj = props.allHabitsObj;
+  const allHabitsObj = useSelector(state => state.habits);
+  const dispatch = useDispatch();
 
   const localDate = (() => {
     const now = new Date();
@@ -19,7 +23,7 @@ const WeekPage = (props) => {
   })();
 
   const initializeData = (response) => {
-    props.setHabits(response.data.allHabitsObj);
+    dispatch(setHabits(response.data.allHabitsObj));
     setCurrentMonth(response.data.currentMonth);
     setCurrentYear(response.data.currentYear);
     setCurrentWeekDates(response.data.currentWeekDates);

@@ -3,22 +3,16 @@ import { useSelector } from 'react-redux';
 import TableCell from './TableCell';
 
 function DayPage(props) {
-  // Set initial value for current date
-  const [currentDate, setCurrentDate] = useState(props.data);
-  const allHabitsObj = props.allHabitsObj;
-  const today = new Date(currentDate);
 
-  // Log allHabitsObj to the console
-  useState(() => {
-    console.log(allHabitsObj);
-  });
+  const allHabitsObj = useSelector(state => state.habits);
+  const today = new Date(props.date);
 
   return (
     <div className="card">
       <div className="card-body">
         {/* Display the current date */}
         <h5 className="card-title">
-          {new Date(currentDate).toLocaleString('en-US', {
+          {today.toLocaleString('en-US', {
             weekday: 'long',
             year: 'numeric',
             month: 'short',
