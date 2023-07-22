@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { addHabit, deleteHabit } from '../../actions/action';
+import { addHabit, deleteHabit, setHabits } from '../../actions/action';
 
 import axios from 'axios';
 import constants from '../../utils/constants';
@@ -15,6 +15,19 @@ function HomePage() {
     const habitNameRef = useRef("");
     const dispatch = useDispatch();
     const allHabitsObj = useSelector(state => state.habits);
+
+    useEffect(() => {
+        axios.get(constants.GET_ALL_HABITS_URL)
+            .then(response => {
+                dispatch(setHabits(response.data.allHabitsObj));
+                setIsLoading(false); // Set loading state to false when request is completed
+            })
+            .catch(error => {
+                console.error(error);
+                setIsLoading(false); // Set loading state to false on error
+            });
+    }, []);
+
 
     useEffect(() => {
         if (allHabitsObj) {
