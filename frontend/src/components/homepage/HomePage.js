@@ -28,13 +28,6 @@ function HomePage() {
             });
     }, []);
 
-
-    useEffect(() => {
-        if (allHabitsObj) {
-            setIsLoading(false);
-        }
-    }, [allHabitsObj]);
-
     const onDelete = (habitId) => {
         setIsLoading(true); // Set loading state to true before making the request
         axios.delete(constants.DELETE_HABIT_URL + "/" + habitId)

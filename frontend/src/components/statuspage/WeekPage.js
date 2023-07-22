@@ -9,7 +9,7 @@ import { setHabits } from '../../actions/action';
 
 const WeekPage = (props) => {
 
-  const [isLoading, setIsLoading] = useState(false); // Add loading state
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
   const [currentMonth, setCurrentMonth] = useState('');
   const [currentYear, setCurrentYear] = useState('');
   const [currentWeekDates, setCurrentWeekDates] = useState([]);
