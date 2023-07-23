@@ -7,7 +7,7 @@ import constants from '../../utils/constants';
 import axios from 'axios';
 import './styles/style.css';
 
-function StatusPage(props) {
+function StatusPage() {
     // Get the local date and time
     const localDate = (() => {
         const now = new Date();
